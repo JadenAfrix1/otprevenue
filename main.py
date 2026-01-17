@@ -1,6 +1,9 @@
 # Auto-install missing dependencies
 import subprocess
 import sys
+import os
+import threading
+from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 def install_package(package):
     """Install a package using pip."""
@@ -587,12 +590,26 @@ class NumberBotWithOTP:
         )
         
         print("🚀 Number Bot with OTP Fetcher starting...")
-        print(f"📱 Bot: @@lamixsmsbot")
+        print(f"📱 Bot: @lamixsmsbot")
         print(f"💬 Group: https://t.me/auroratechinc")
         
         self.application.run_polling(allowed_updates=Update.ALL_TYPES)
 
+def start_port_listener(port):
+    try:
+        server = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
+        thread = threading.Thread(target=server.serve_forever)
+        thread.daemon = True
+        thread.start()
+        print(f"🌐 Listening on port {port}")
+    except Exception as e:
+        logging.error(f"Port listener failed: {e}")
+
 if __name__ == '__main__':
+    # Start a simple port listener (use PORT env var or default 8080)
+    port = int(os.environ.get('PORT', '8080'))
+    start_port_listener(port)
+
     bot = NumberBotWithOTP(
         bot_token="8205264851:AAGrI2yf-d8nCDo8np1ERUoc2PMvv9AzvDY",
         chat_id="7500869913",
