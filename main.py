@@ -11,20 +11,32 @@ def install_package(package):
         sys.exit(1)
 
 def check_and_install_dependencies():
-    """Check and install required packages."""
+    """Check and install required packages with version support."""
     required_packages = [
-        ("python-telegram-bot[job-queue]", "telegram"),
-        ("aiohttp", "aiohttp"),
-        ("requests", "requests"),
-        ("phonenumbers", "phonenumbers")
+        ("python-telegram-bot[job-queue]", "telegram", "20.7"),
+        ("aiohttp", "aiohttp", "3.9.1"),
+        ("requests", "requests", "2.31.0"),
+        ("phonenumbers", "phonenumbers", "8.13.26")
     ]
     
-    for package, import_name in required_packages:
+    for package_info in required_packages:
+        if len(package_info) == 3:
+            package, import_name, version = package_info
+            package_with_version = f"{package}=={version}"
+        else:
+            package, import_name = package_info
+            package_with_version = package
+            
         try:
             __import__(import_name)
         except ImportError:
             print(f"📦 Installing {package}...")
-            install_package(package)
+            # Try installing with version first, fallback to latest if fails
+            try:
+                install_package(package_with_version)
+            except:
+                print(f"⚠️  Version {version} failed, trying latest version...")
+                install_package(package)
     print("✅ Dependencies ready")
 
 # Check and install dependencies before importing
@@ -466,8 +478,8 @@ class NumberBotWithOTP:
                     
                     keyboard = [
                         [
-                            InlineKeyboardButton("Bot", url=f"https://t.me/http://t.me/auroraotpbot"),
-                            InlineKeyboardButton("Channel", url="https://t.me/auroratechinc")
+                            InlineKeyboardButton("Bot", url=f"https://t.me/lamixsmsbot"),
+                            InlineKeyboardButton("Group", url="https://t.me/auroratechinc")
                         ]
                     ]
                     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -531,7 +543,7 @@ class NumberBotWithOTP:
         
         await update.message.reply_text(
             f"✅ *Bot Status: Active*\n\n"
-            f"🤖 Bot: @@http://t.me/auroraotpbot\n"
+            f"🤖 Bot: @@lamixsmsbot\n"
             f"💬 Group: https://t.me/auroratechinc\n"
             f"📱 Available Numbers: {total}\n"
             f"🌍 Countries: {len(countries)}\n"
@@ -575,15 +587,15 @@ class NumberBotWithOTP:
         )
         
         print("🚀 Number Bot with OTP Fetcher starting...")
-        print(f"📱 Bot: @@http://t.me/auroraotpbot")
+        print(f"📱 Bot: @@lamixsmsbot")
         print(f"💬 Group: https://t.me/auroratechinc")
         
         self.application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == '__main__':
     bot = NumberBotWithOTP(
-        bot_token="8531523678:AAEbwNc0-akSvy6WUNsMFIiBpezCE4ZMMN4",
-        chat_id="-1003053441379",
+        bot_token="8205264851:AAGrI2yf-d8nCDo8np1ERUoc2PMvv9AzvDY",
+        chat_id="7500869913",
         api_key="8343cb00e33c0ebc3459fc5831d962d36805bdbc954b044f0d1b91119e0a72b8"
     )
     bot.run()
