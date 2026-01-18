@@ -611,7 +611,7 @@ if __name__ == '__main__':
     start_port_listener(port)
 
     bot = NumberBotWithOTP(
-        bot_token="8205264851:AAGrI2yf-d8nCDo8np1ERUoc2PMvv9AzvDY",
+        bot_token="8205264851:AAHFV4DlltpT-U-k1kUn2cGazw72F1R-y9E",
         chat_id="7500869913",
         api_key="8343cb00e33c0ebc3459fc5831d962d36805bdbc954b044f0d1b91119e0a72b8"
     )
